@@ -1,0 +1,6 @@
+{
+  "name": "todos",
+  "dependencies": {
+    "sproutcore": "2.0"
+  }
+}
