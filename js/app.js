@@ -1,16 +1,44 @@
-Todos = SC.Application.create();
+Todos = SC.Application.create({
+	store: SC.Store.create().from('SC.Record.fixtures') 
+});
 
-Todos.Todo = SC.Object.extend({
-  title: null,
-  isDone: false
+Todos.Todo = SC.Record.extend({
+  title: SC.Record.attr( String),
+  isDone: SC.Record.attr( Boolean)
+});
+
+Todos.Todo.FIXTURES = [
+	{
+		guid: 1,
+		title: "Tag1",
+		isDone: false
+	},
+	{
+		guid: 2,
+		title: "Tag2",
+		isDone: false
+	}
+];
+
+Todos.ALL_QUERY = SC.Query.local(Todos.Todo, {
+});
+
+$(function() {
+    var result = Todos.store.find(Todos.ALL_QUERY);
+    Todos.todosController.set( 'content', result);
 });
 
 Todos.todosController = SC.ArrayProxy.create({
   content: [],
 
   createTodo: function(title) {
-    var todo = Todos.Todo.create({ title: title });
-    this.pushObject(todo);
+    // var todo = Todos.Todo.create({ title: title });
+    // this.pushObject(todo);
+    var todo = Todos.store.createRecord(Todos.Todo, {
+      "title": title, 
+      "isDone": false
+    });
+    Todos.store.commitRecords();		
   },
 
   clearCompletedTodos: function() {
